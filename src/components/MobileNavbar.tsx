@@ -19,6 +19,7 @@ import Link from "next/link";
 function MobileNavbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const { isSignedIn } = useAuth();
+  const { user, isLoaded } = useUser();
   const { theme, setTheme } = useTheme();
 
   return (
@@ -61,10 +62,18 @@ function MobileNavbar() {
                   </Link>
                 </Button>
                 <Button variant="ghost" className="flex items-center gap-3 justify-start" asChild>
-                  <Link href="/profile">
-                    <UserIcon className="w-4 h-4" />
-                    Profile
-                  </Link>
+                  { user ? (
+                    <Link href={`/profile/${user.username ?? user.emailAddresses[0].emailAddress.split("@")[0]}`}>
+                      <UserIcon className="w-4 h-4" />
+                      Profile
+                    </Link>
+                    ) : (
+                    <Link href={"/profile"}>
+                      <UserIcon className="w-4 h-4" />
+                      Profile
+                    </Link>
+                    )
+                  }
                 </Button>
                 <SignOutButton>
                   <Button variant="ghost" className="flex items-center gap-3 justify-start w-full">
